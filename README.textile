@@ -4,7 +4,28 @@ Is a simple piece of rack middleware[1] which allows me to write stuff in textil
 
 h2. Usage
 
-It's pretty simple to use, just clone this repository, and edit your layout in the layouts directory, write your content in the pages directory, and put anything else you want available in the public directory.
+# Install the gem: 
+<pre><code>gem install doco</code></pre>
+# Create your file structure, here's an example:
+<pre><code>dir/
+	|-- config.ru
+	|-- layouts
+	|   `-- default.mustache
+	`-- pages
+    	`-- index.textile
+</code></pre>
+# Add Doco to your @config.ru@:
+<pre><code>require 'doco'
+use Rack::Doco
+</code></pre>
+# Serve it up using your favourite rack server!
+
+h2. Middleware Options
+
+Doco's middleware can have a few options passed to it, these are:
+<pre><code>:url  => '/'      # path at which to mount Doco
+:root => Dir.pwd  # path in which to locate the `layouts` and `pages` directories.
+</code></pre>
 
 h2. Patches & Feedback
 
