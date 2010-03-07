@@ -4,8 +4,8 @@ require 'lib/doco'
 # Rack config
 use Rack::CommonLogger
 
+use Rack::Static, :urls => ['/stylesheets', '/javascript', '/favicon.ico', '/404.html'], :root => "public"
 use Doco::App
-use Rack::Static, :urls => ['/stylesheets', '/javascript', '/favicon.ico'], :root => "public"
 
 if ENV['RACK_ENV'] == 'development'
   use Rack::ShowExceptions

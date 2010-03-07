@@ -18,29 +18,21 @@ module Doco
     end
   
     def call(env)
-      path = env["PATH_INFO"]
-      can_serve = path.index(@url) == 0 && env["REQUEST_METHOD"] == "GET" && !File.file?(path)
+      path = Rack::Utils.unescape(File.expand_path(env['PATH_INFO']))
+      can_serve = path.index(@url) == 0 && env["REQUEST_METHOD"] == "GET"
     
       if can_serve
-        route(Rack::Request.new(env))
+        route = path.split('/').reject {|i| i.empty? }
+        route << "index" if route.empty?
+
+        respond 200, render(route)
       else
         @app.call(env)
       end
-    end
-  
-    def route(request)
-      route = (request.path || '/').split('/').reject {|i| i.empty? }
-      route << "index" if route.empty?
-    
-      respond 200, render(route)
     rescue Errno::ENOENT => e
-      respond 404, if File.exists?(@notFoundPage)
-        body = File.read(@notFoundPage)
-      else
-        "404 Not Found"
-      end
+      @app.call(env)
     end
-  
+      
     private 
       def respond status, body
         headers = {
