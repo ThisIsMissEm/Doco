@@ -1,22 +1,27 @@
 
 require 'rack/utils'
-require 'fileutils'
 require 'yaml'
 require 'mustache'
 require 'RedCloth'
 
 require 'digest'
 
-module Doco
-  class App
+module Rack
+  class Doco
     def initialize(app, options={})
       @app = app
       @url = options[:url].chomp("/") || "/"
       @root = options[:root] || Dir.pwd
     end
-  
+    
     def call(env)
-      path = Rack::Utils.unescape(File.expand_path(env['PATH_INFO']))
+      dup._call(env)
+    end
+    
+    F = ::File
+    
+    def _call(env)
+      path = Utils.unescape(F.expand_path(env['PATH_INFO']))
     
       result = if path.index(@url) == 0 && env["REQUEST_METHOD"] == "GET"
         route = path[@url.length..-1].split('/').reject {|i| i.empty? }
@@ -32,7 +37,7 @@ module Doco
       def respond status, body
         headers = {
           "Content-Type" => "text/html",
-          "Content-Length" => Rack::Utils.bytesize(body).to_s,
+          "Content-Length" => Utils.bytesize(body).to_s,
           "Etag" => Digest::SHA1.hexdigest(body)
         }
     
@@ -40,10 +45,10 @@ module Doco
       end
     
       def handle(route)
-        page = File.join(@root, "pages", route) + ".textile"
+        page = F.join(@root, "pages", route) + ".textile"
         
-        if File.exists?(page)
-          content = File.read(page)
+        if F.exists?(page)
+          content = F.read(page)
           data    = {"title" => "untitled", "layout" => "default"}
       
           if content =~ /^(---\s*\n.*?\n?)^(---\s*$\n?)/m
@@ -63,7 +68,7 @@ module Doco
       end
       
       def load_layout(layout)
-        File.read(File.join(@root, "layouts", layout + ".mustache"))
+        F.read(F.join(@root, "layouts", layout + ".mustache"))
       end
 
       def textile(content)
