@@ -1,0 +1,17 @@
+h1. Doco
+
+Is a simple piece of rack middleware[1] which allows me to write stuff in textile, give it structure with mustache, and deploy it easily. It was designed for documentation, hence the name.
+
+h2. Usage
+
+It's pretty simple to use, just clone this repository, and edit your layout in the layouts directory, write your content in the pages directory, and put anything else you want available in the public directory.
+
+h2. Patches & Feedback
+
+Patches are welcome, as is feedback. If you know about building rack middleware and don't like me calling this middleware, get in touch[2] and help me to make it into a true piece of rack middleware. 
+
+---
+
+fn1. Maybe it's a rack application, not middleware? I'm still learning this stuff!
+
+fn2. Send me a "message on github":http://github.com/inbox/new/miksago
