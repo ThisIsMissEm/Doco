@@ -1,0 +1,7 @@
+---
+title: Welcome to Doco
+---
+
+h1. Doco is...
+
+A very small piece of rack middleware to allow me to write documentation in textile and style it using mustache templates.
