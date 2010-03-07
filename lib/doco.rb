@@ -11,7 +11,7 @@ module Doco
   class App
     def initialize(app, options={})
       @app = app
-      @url = options[:url] || "/"
+      @url = options[:url].chomp("/") || "/"
       @root = options[:root] || Dir.pwd
     
       @notFoundPage = File.join(@root, "public", "404.html")
@@ -19,15 +19,14 @@ module Doco
   
     def call(env)
       path = Rack::Utils.unescape(File.expand_path(env['PATH_INFO']))
-      can_serve = path.index(@url) == 0 && env["REQUEST_METHOD"] == "GET"
     
-      if can_serve
-        route = path.split('/').reject {|i| i.empty? }
+      if path.index(@url) == 0 && env["REQUEST_METHOD"] == "GET"
+        route = path[@url.length..-1].split('/').reject {|i| i.empty? }
         route << "index" if route.empty?
 
         respond 200, render(route)
       else
-        @app.call(env)
+        result.first == 404 ? @app.call(env) : result
       end
     rescue Errno::ENOENT => e
       @app.call(env)
@@ -53,10 +52,14 @@ module Doco
           data = data.merge(YAML.load($1))
         end
       
-        mustache(File.read(File.join(@root, "layouts", data["layout"] + ".mustache")), data.merge({
+        mustache(load_layout(data["layout"]), data.merge({
           :body => textile(content),
           :base_url => @url
         }))
+      end
+      
+      def load_layout(layout)
+        File.read(File.join(@root, "layouts", layout + ".mustache"))
       end
 
       def textile(content)

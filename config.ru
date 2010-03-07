@@ -5,7 +5,7 @@ require 'lib/doco'
 use Rack::CommonLogger
 
 use Rack::Static, :urls => ['/stylesheets', '/javascript', '/favicon.ico', '/404.html'], :root => "public"
-use Doco::App
+use Doco::App, :url => '/docs/'
 
 if ENV['RACK_ENV'] == 'development'
   use Rack::ShowExceptions

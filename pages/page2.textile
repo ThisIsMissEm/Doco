@@ -1,0 +1,5 @@
+---
+title: Doco Page2
+---
+
+h1. Page 2
