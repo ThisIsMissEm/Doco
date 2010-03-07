@@ -10,7 +10,7 @@ module Rack
   class Doco
     def initialize(app, options={})
       @app = app
-      @url = options[:url].chomp("/") || "/"
+      @url = (options[:url] || "/").chomp("/")
       @root = options[:root] || Dir.pwd
     end
     
