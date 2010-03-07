@@ -11,13 +11,9 @@ begin
     gem.homepage = "http://github.com/miksago/doco"
     gem.authors = ["Micheil Smith"]
     gem.add_dependency "rack"
-    gem.add_dependency "yaml"
     gem.add_dependency "mustache"
     gem.add_dependency "RedCloth"
     gem.require_path = 'lib'
-    gem.autorequire = 'doco'
-    gem.bindir = "bin"
-    gem.executables = %w( doco )
     gem.files = %w(LICENSE README.textile Rakefile) + Dir.glob("{lib,bin}/**/{*,.[a-z]*}")
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

@@ -1,0 +1,8 @@
+.DS_Store
+*~
+.#*
+\#*#
+pkg
+.yardoc
+doc
+*.gem
